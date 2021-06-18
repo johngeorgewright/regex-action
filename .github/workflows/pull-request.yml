@@ -16,7 +16,7 @@ jobs:
         id: parser
         uses: ./
         with:
-          ref: refs/tags/@johng/my-package-v1.2.3
+          ref: refs/tags/@johngw/my-package-v1.2.3
           regex: refs/tags/(?P<package>@johngw/[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
 
       - name: 🧪  Assert Package
