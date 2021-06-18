@@ -23,11 +23,13 @@ runs:
       run: |
         import json
         import re
+        import sys
 
         reftest = re.compile(r'${{ inputs.regex }}')
         refmatch = reftest.match('${{ inputs.ref }}')
 
         if refmatch is None:
           print('Cannot match ref "${{ inputs.ref }}".')
+          sys.exit(1)
         else:
           print(f'::set-output name=groups::{json.dumps(refmatch.groupdict())}')
