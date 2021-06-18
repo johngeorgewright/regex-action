@@ -1,2 +1,33 @@
 # regex-action
-Applies a regular expression to an input.
+
+A GitHub action that applies a regular expression to an input and outputs the groups.
+
+## Inputs
+
+| Name | Description | Required |
+| --- | --- | --- |
+| `regex` | The regular expression | `true` |
+| `ref` | What to apply the regex to | `true |
+
+## Example
+
+```yaml
+jobs:
+  decipher:
+    name: Decipher
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.parser.outputs.package }}
+      version: ${{ steps.parser.outputs.version }}
+    steps:
+      - name: Parser
+        id: parser
+        uses: johngeorgewright/regex-action
+        with:
+          ref: ${{ github.ref }}
+          regex: ^refs/tags/(?P<package>[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
+      - name: Debug
+        run: |
+          echo 'package = ${{ fromJSON(steps.parser.outputs.groups).package }}'
+          echo 'version = ${{ fromJSON(steps.parser.outputs.groups).version }}'
+```

@@ -1,0 +1,33 @@
+name: Regular Expression Matcher
+
+description: Applies a regular expression to an input and outputs its groups.
+
+inputs:
+  ref:
+    description: The git ref to parse.
+    required: true
+  regex:
+    description: The regular expression to use.
+    required: true
+
+outputs:
+  groups:
+    description: The groups as a JSON string
+    value: ${{ steps.parser.outputs.groups }}
+
+runs:
+  using: composite
+  steps:
+    - id: parser
+      shell: python
+      run: |
+        import json
+        import re
+
+        reftest = re.compile(r'${{ inputs.regex }}')
+        refmatch = reftest.match('${{ inputs.ref }}')
+
+        if refmatch is None:
+          print('Cannot match ref "${{ inputs.ref }}".')
+        else:
+          print(f'::set-output name=groups::{json.dumps(refmatch.groupdict())}')
