@@ -1,0 +1,25 @@
+name: 🚀  Release
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  release:
+    name: 🚀  Publish GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚  Checkout project
+        uses: actions/checkout@v2
+
+      - name: 🚀  Publish Release
+        uses: codfish/semantic-release-action@v1
+        with:
+          plugins: |
+            [
+              "@semantic-release/commit-analyzer", 
+              "@semantic-release/release-notes-generator", 
+              "@semantic-release/github"
+            ]
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
