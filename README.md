@@ -7,7 +7,7 @@ A GitHub action that applies a regular expression to an input and outputs the gr
 | Name | Description | Required |
 | --- | --- | --- |
 | `regex` | The regular expression | `true` |
-| `ref` | What to apply the regex to | `true |
+| `ref` | What to apply the regex to | `true` |
 
 ## Example
 
