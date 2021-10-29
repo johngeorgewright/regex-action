@@ -41,7 +41,7 @@ jobs:
         id: test2
         uses: ./
         with:
-          ref: >
+          ref: |
             h
             e
             l
