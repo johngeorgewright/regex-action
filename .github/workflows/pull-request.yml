@@ -51,7 +51,7 @@ jobs:
 
       - name: 🧪  Assert Multiline
         run: |
-          LETTER='${{ fromJSON(steps.test1.outputs.groups).letter }}'
+          LETTER='${{ fromJSON(steps.test2.outputs.groups).letter }}'
           if [[ $LETTER != 'h' ]]
           then
             echo "$LETTER does not equal 'h'"
