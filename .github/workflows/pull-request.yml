@@ -41,13 +41,13 @@ jobs:
         id: test2
         uses: ./
         with:
-          ref: "
+          ref: >
             h
             e
             l
             l
-            o"
-          regex: (?P<letter>h)
+            o
+          regex: '[\n\r]*(?P<letter>h)'
 
       - name: 🧪  Assert Multiline
         run: |
