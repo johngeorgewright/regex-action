@@ -32,7 +32,7 @@ runs:
         import sys
 
         if '${{ inputs.debug }}' == 'true':
-          echo '::echo::on'
+          print('::echo::on')
 
         reftest = re.compile(r'${{ inputs.regex }}', re.MULTILINE)
         refmatch = reftest.match("""${{ inputs.ref }}""")
