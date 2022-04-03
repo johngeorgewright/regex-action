@@ -34,7 +34,7 @@ runs:
         if refmatch is None:
           print("""Cannot match ref "${{ inputs.ref }}".""")
           sys.exit(1)
-        elif ${{ inputs.asJSON }}:
+        elif '${{ inputs.asJSON }}' == 'true':
           print(f'::set-output name=groups::{json.dumps(refmatch.groupdict())}')
         else:
           for key, value in refmatch.groupdict().items():
