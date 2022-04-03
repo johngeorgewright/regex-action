@@ -16,10 +16,10 @@ inputs:
     description: The regular expression to use.
     required: true
 
-outputs:
-  groups:
-    description: The groups as a JSON string
-    value: ${{ steps.parser.outputs.groups }}
+# outputs:
+#   groups:
+#     description: The groups as a JSON string
+#     value: ${{ steps.parser.outputs.groups }}
 
 runs:
   using: composite
