@@ -6,6 +6,9 @@ inputs:
   asJSON:
     description: Sets the output to "groups" as JSON. Useful when the output is difficult for GitHub actions to manage without lots of escaping.
     required: false
+  debug:
+    description: Output debug information
+    required: false
   ref:
     description: The git ref to parse.
     required: true
@@ -27,6 +30,9 @@ runs:
         import json
         import re
         import sys
+
+        if '${{ inputs.debug }}' == 'true':
+          echo '::echo::on'
 
         reftest = re.compile(r'${{ inputs.regex }}', re.MULTILINE)
         refmatch = reftest.match("""${{ inputs.ref }}""")
