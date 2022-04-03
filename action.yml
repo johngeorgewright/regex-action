@@ -3,6 +3,9 @@ name: Regular Expression Matcher
 description: Applies a regular expression to an input and outputs its groups.
 
 inputs:
+  asJSON:
+    description: Sets the output to "groups" as JSON. Useful when the output is difficult for GitHub actions to manage without lots of escaping.
+    required: false
   ref:
     description: The git ref to parse.
     required: true
@@ -31,5 +34,8 @@ runs:
         if refmatch is None:
           print("""Cannot match ref "${{ inputs.ref }}".""")
           sys.exit(1)
-        else:
+        elif ${{ inputs.asJSON }}:
           print(f'::set-output name=groups::{json.dumps(refmatch.groupdict())}')
+        else:
+          for key, value in refmatch.groupdict().items():
+            print(f'::set-output name={key}::{value}')

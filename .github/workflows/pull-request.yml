@@ -21,7 +21,7 @@ jobs:
 
       - name: 🧪  Assert Package
         run: |
-          PACKAGE='${{ fromJSON(steps.test1.outputs.groups).package }}'
+          PACKAGE='${{ steps.test1.outputs.package }}'
           if [[ $PACKAGE != '@johngw/my-package' ]]
           then
             echo "$PACKAGE does not equal '@johngw/my-package'"
@@ -30,7 +30,7 @@ jobs:
 
       - name: 🧪  Assert Version
         run: |
-          VERSION='${{ fromJSON(steps.test1.outputs.groups).version }}'
+          VERSION='${{ steps.test1.outputs.version }}'
           if [[ $VERSION != '1.2.3' ]]
           then
             echo "$VERSION does not equal '1.2.3'"
@@ -51,9 +51,32 @@ jobs:
 
       - name: 🧪  Assert Multiline
         run: |
-          LETTER='${{ fromJSON(steps.test2.outputs.groups).letter }}'
+          LETTER='${{ steps.test2.outputs.letter }}'
           if [[ $LETTER != 'h' ]]
           then
             echo "$LETTER does not equal 'h'"
+            exit 1
+          fi
+
+      - name: Test Single Line
+        id: test3
+        uses: ./
+        with:
+          asJSON: true
+          ref: refs/tags/@johngw/my-package-v1.2.3
+          regex: refs/tags/(?P<package>@johngw/[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
+
+      - name: 🧪  Assert JSON
+        run: |
+          PACKAGE='${{ fromJSON(steps.test1.outputs.groups).package }}'
+          VERSION='${{ fromJSON(steps.test1.outputs.groups).version }}'
+          if [[ $PACKAGE != '@johngw/my-package' ]]
+          then
+            echo "$PACKAGE does not equal '@johngw/my-package'"
+            exit 1
+          fi
+          if [[ $VERSION != '1.2.3' ]]
+          then
+            echo "$VERSION does not equal '1.2.3'"
             exit 1
           fi
