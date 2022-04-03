@@ -16,6 +16,7 @@ jobs:
         id: test1
         uses: ./
         with:
+          debug: 'true'
           ref: refs/tags/@johngw/my-package-v1.2.3
           regex: refs/tags/(?P<package>@johngw/[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
 
@@ -41,6 +42,7 @@ jobs:
         id: test2
         uses: ./
         with:
+          debug: 'true'
           ref: |
             h
             e
@@ -63,6 +65,7 @@ jobs:
         uses: ./
         with:
           asJSON: true
+          debug: 'true'
           ref: refs/tags/@johngw/my-package-v1.2.3
           regex: refs/tags/(?P<package>@johngw/[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
 
