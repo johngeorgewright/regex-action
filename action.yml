@@ -20,8 +20,9 @@ runs:
   steps:
     - id: parser
       shell: python
-      run: | #::python::#
+      run: | # python
         import json
+        import os
         import re
         import sys
 
@@ -32,4 +33,5 @@ runs:
           print("""Cannot match ref "${{ inputs.ref }}".""")
           sys.exit(1)
         else:
-          print(f'::set-output name=groups::{json.dumps(refmatch.groupdict())}')
+          file = open(os.environ['GITHUB_OUTPUT'], 'a')
+          file.write(f'groups={json.dumps(refmatch.groupdict())}\n')
