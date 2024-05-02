@@ -14,6 +14,7 @@ jobs:
 
       - name: 🚀  Publish Release
         uses: codfish/semantic-release-action@v3
+        id: release
         with:
           plugins: |
             [
@@ -23,3 +24,40 @@ jobs:
             ]
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📖  Update version in README
+        uses: theboi/github-update-readme@v1.3.0
+        with:
+          customReadmeFile: | # markdown
+            # regex-action
+
+            A GitHub action that applies a regular expression to an input and outputs the groups.
+
+            ## Inputs
+
+            | Name | Description | Required |
+            | --- | --- | --- |
+            | `regex` | The regular expression | `true` |
+            | `ref` | What to apply the regex to | `true` |
+
+            ## Example
+
+            ```yaml
+            jobs:
+              decipher:
+                name: Decipher
+                runs-on: ubuntu-latest
+                steps:
+
+                  - name: Parser
+                    id: parser
+                    uses: johngeorgewright/regex-action@v${{ steps.release.outputs.release-version }}
+                    with:
+                      ref: ${{ github.ref }}
+                      regex: ^refs/tags/(?P<package>[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
+
+                  - name: Debug
+                    run: |
+                      echo 'package = ${{ '${{ fromJSON(steps.parser.outputs.groups).package }}' }}'
+                      echo 'version = ${{ '${{ fromJSON(steps.parser.outputs.groups).version }}' }}'
+            ```
