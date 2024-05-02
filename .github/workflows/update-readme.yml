@@ -20,7 +20,7 @@ jobs:
       - name: 📖  Update README
         uses: theboi/github-update-readme@v1.3.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PUSH_TOKEN }}
         with:
           customReadmeFile: | # markdown
             # regex-action
