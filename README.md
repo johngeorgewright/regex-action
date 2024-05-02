@@ -20,7 +20,7 @@ jobs:
 
       - name: Parser
         id: parser
-        uses: johngeorgewright/regex-action
+        uses: johngeorgewright/regex-action@v2.0.0
         with:
           ref: ${{ github.ref }}
           regex: ^refs/tags/(?P<package>[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
