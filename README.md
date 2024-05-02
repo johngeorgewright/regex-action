@@ -20,13 +20,12 @@ jobs:
 
       - name: Parser
         id: parser
-        uses: johngeorgewright/regex-action@v2.0.0
+        uses: johngeorgewright/regex-action@vtest
         with:
-          ref: ${{ github.ref }}
+          ref: refs/heads/master
           regex: ^refs/tags/(?P<package>[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
 
       - name: Debug
         run: |
           echo 'package = ${{ fromJSON(steps.parser.outputs.groups).package }}'
           echo 'version = ${{ fromJSON(steps.parser.outputs.groups).version }}'
-```
