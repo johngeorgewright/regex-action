@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release-version: ${{ steps.release.outputs.release-version }}
+      released: ${{ steps.release.outputs.new-release-published }}
     steps:
       - name: 🚚  Checkout project
         uses: actions/checkout@v4
@@ -30,6 +31,7 @@ jobs:
   update-readme:
     name: 📖  Update version in README
     needs: [release]
+    if: needs.release.outputs.released == 'true'
     uses: ./.github/workflows/update-readme.yml
     with:
       release-version: ${{ needs.release.outputs.release-version }}
