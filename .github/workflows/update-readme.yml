@@ -18,10 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📖  Update README
-        uses: theboi/github-update-readme@v1.3.0
+        uses: johngeorgewright/github-update-readme@main
         env:
           GITHUB_TOKEN: ${{ secrets.PUSH_TOKEN }}
         with:
+          commit-message: 'docs: update readme [skip ci]'
           customReadmeFile: | # markdown
             # regex-action
 
