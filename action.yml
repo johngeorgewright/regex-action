@@ -3,17 +3,18 @@ name: Regular Expression Matcher
 description: Applies a regular expression to an input and outputs its groups.
 
 inputs:
+  asJSON:
+    description: Sets the output to "groups" as JSON. Useful when the output is difficult for GitHub actions to manage without lots of escaping.
+    required: false
+  debug:
+    description: Output debug information
+    required: false
   ref:
     description: The git ref to parse.
     required: true
   regex:
     description: The regular expression to use.
     required: true
-
-outputs:
-  groups:
-    description: The groups as a JSON string
-    value: ${{ steps.parser.outputs.groups }}
 
 runs:
   using: composite
@@ -26,12 +27,22 @@ runs:
         import re
         import sys
 
+        if '${{ inputs.debug }}' == 'true':
+          print('::echo::on')
+
         reftest = re.compile(r'${{ inputs.regex }}', re.MULTILINE)
         refmatch = reftest.match("""${{ inputs.ref }}""")
 
         if refmatch is None:
           print("""Cannot match ref "${{ inputs.ref }}".""")
           sys.exit(1)
+
+        def output(dict):
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as file:
+            for key, value in dict.items():
+              print(f'{key}={value}', file=file)
+
+        if '${{ inputs.asJSON }}' == 'true':
+          output({ 'groups': json.dumps(refmatch.groupdict()) })
         else:
-          file = open(os.environ['GITHUB_OUTPUT'], 'a')
-          file.write(f'groups={json.dumps(refmatch.groupdict())}\n')
+          output(refmatch.groupdict())
