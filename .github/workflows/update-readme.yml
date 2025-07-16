@@ -1,0 +1,59 @@
+name: Update README
+
+on:
+  workflow_call:
+    inputs:
+      release-version:
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      release-version:
+        description: The version to add in the readme.
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📖  Update README
+        uses: johngeorgewright/github-update-readme@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PUSH_TOKEN }}
+        with:
+          commit-message: 'docs: update readme [skip ci]'
+          customReadmeFile: | # markdown
+            # regex-action
+
+            A GitHub action that applies a regular expression to an input and outputs the groups.
+
+            ## Inputs
+
+            | Name | Description | Required |
+            | --- | --- | --- |
+            | `regex` | The regular expression | `true` |
+            | `ref` | What to apply the regex to | `true` |
+
+            ## Example
+
+            ```yaml
+            jobs:
+              decipher:
+                name: Decipher
+                runs-on: ubuntu-latest
+                steps:
+
+                  - name: Parser
+                    id: parser
+                    uses: johngeorgewright/regex-action@v${{ inputs.release-version }}
+                    with:
+                      ref: ${{ github.ref }}
+                      regex: ^refs/tags/(?P<package>[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
+
+                  - name: Debug
+                    run: |
+                      echo 'package = ${{ '${{ fromJSON(steps.parser.outputs.groups).package }}' }}'
+                      echo 'version = ${{ '${{ fromJSON(steps.parser.outputs.groups).version }}' }}'
+            ```

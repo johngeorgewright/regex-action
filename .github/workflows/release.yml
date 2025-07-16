@@ -8,12 +8,16 @@ jobs:
   release:
     name: 🚀  Publish GitHub Release
     runs-on: ubuntu-latest
+    outputs:
+      release-version: ${{ steps.release.outputs.release-version }}
+      released: ${{ steps.release.outputs.new-release-published }}
     steps:
       - name: 🚚  Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🚀  Publish Release
-        uses: codfish/semantic-release-action@v1
+        uses: codfish/semantic-release-action@v3
+        id: release
         with:
           plugins: |
             [
@@ -23,3 +27,12 @@ jobs:
             ]
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-readme:
+    name: 📖  Update version in README
+    needs: [release]
+    if: needs.release.outputs.released == 'true'
+    uses: ./.github/workflows/update-readme.yml
+    with:
+      release-version: ${{ needs.release.outputs.release-version }}
+    

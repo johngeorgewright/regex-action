@@ -16,18 +16,14 @@ inputs:
     description: The regular expression to use.
     required: true
 
-# outputs:
-#   groups:
-#     description: The groups as a JSON string
-#     value: ${{ steps.parser.outputs.groups }}
-
 runs:
   using: composite
   steps:
     - id: parser
       shell: python
-      run: | #::python::#
+      run: | # python
         import json
+        import os
         import re
         import sys
 
@@ -41,7 +37,9 @@ runs:
           print("""Cannot match ref "${{ inputs.ref }}".""")
           sys.exit(1)
         elif '${{ inputs.asJSON }}' == 'true':
-          print(f'::set-output name=groups::{json.dumps(refmatch.groupdict())}')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as file:
+            print(f'groups={json.dumps(refmatch.groupdict())}', file=file)
         else:
           for key, value in refmatch.groupdict().items():
-            print(f'::set-output name={key}::{value}')
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as file:
+              print(f'{key}={value}', file=file)
