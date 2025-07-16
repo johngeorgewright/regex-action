@@ -23,13 +23,13 @@ jobs:
       - name: 🧪  Assert Package
         if: steps.test1.outputs.package != '@johngw/my-package'
         run: | # shell
-          echo "$PACKAGE does not equal '@johngw/my-package'"
+          echo "'${{ steps.test1.outputs.package }}' does not equal '@johngw/my-package'"
           exit 1
 
       - name: 🧪  Assert Version
         if: steps.test1.outputs.version != '1.2.3'
         run: | # shell
-          echo "$VERSION does not equal '1.2.3'"
+          echo "'${{ steps.test1.outputs.version }}' does not equal '1.2.3'"
           exit 1
 
       - name: Test Multiline
@@ -48,7 +48,7 @@ jobs:
       - name: 🧪  Assert Multiline
         if: steps.test2.outputs.letter != 'h'
         run: | # shell
-          echo "$LETTER does not equal 'h'"
+          echo "'${{ steps.test2.outputs.letter }}' does not equal 'h'"
           exit 1
 
       - name: Test Single Line
