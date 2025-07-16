@@ -36,10 +36,13 @@ runs:
         if refmatch is None:
           print("""Cannot match ref "${{ inputs.ref }}".""")
           sys.exit(1)
-        elif '${{ inputs.asJSON }}' == 'true':
+
+        def output(dict):
           with open(os.environ['GITHUB_OUTPUT'], 'a') as file:
-            print(f'groups={json.dumps(refmatch.groupdict())}', file=file)
-        else:
-          for key, value in refmatch.groupdict().items():
-            with open(os.environ['GITHUB_OUTPUT'], 'a') as file:
+            for key, value in dict.items():
               print(f'{key}={value}', file=file)
+
+        if '${{ inputs.asJSON }}' == 'true':
+          output({ 'groups': json.dumps(refmatch.groupdict()) })
+        else:
+          output(refmatch.groupdict())
