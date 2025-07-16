@@ -21,22 +21,16 @@ jobs:
           regex: refs/tags/(?P<package>@johngw/[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
 
       - name: 🧪  Assert Package
-        run: |
-          PACKAGE='${{ steps.test1.outputs.package }}'
-          if [[ $PACKAGE != '@johngw/my-package' ]]
-          then
-            echo "$PACKAGE does not equal '@johngw/my-package'"
-            exit 1
-          fi
+        if: steps.test1.outputs.package != '@johngw/my-package'
+        run: | # shell
+          echo "$PACKAGE does not equal '@johngw/my-package'"
+          exit 1
 
       - name: 🧪  Assert Version
-        run: |
-          VERSION='${{ steps.test1.outputs.version }}'
-          if [[ $VERSION != '1.2.3' ]]
-          then
-            echo "$VERSION does not equal '1.2.3'"
-            exit 1
-          fi
+        if: steps.test1.outputs.version != '1.2.3'
+        run: | # shell
+          echo "$VERSION does not equal '1.2.3'"
+          exit 1
 
       - name: Test Multiline
         id: test2
@@ -52,13 +46,10 @@ jobs:
           regex: '[\n\r]*(?P<letter>h)'
 
       - name: 🧪  Assert Multiline
-        run: |
-          LETTER='${{ steps.test2.outputs.letter }}'
-          if [[ $LETTER != 'h' ]]
-          then
-            echo "$LETTER does not equal 'h'"
-            exit 1
-          fi
+        if: steps.test2.outputs.letter != 'h'
+        run: | # shell
+          echo "$LETTER does not equal 'h'"
+          exit 1
 
       - name: Test Single Line
         id: test3
