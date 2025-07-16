@@ -5,15 +5,15 @@ on:
     branches: [master]
 
 jobs:
-  test:
-    name: Test
+  test1:
+    name: Test Single Line
     runs-on: ubuntu-latest
     steps:
       - name: 🚚  Checkout project
         uses: actions/checkout@v4
 
-      - name: Test Single Line
-        id: test1
+      - name: Fixture
+        id: test
         uses: ./
         with:
           debug: 'true'
@@ -21,19 +21,26 @@ jobs:
           regex: refs/tags/(?P<package>@johngw/[a-zA-Z0-9_-]+)-v(?P<version>\d+.\d+.\d+)$
 
       - name: 🧪  Assert Package
-        if: steps.test1.outputs.package != '@johngw/my-package'
+        if: steps.test.outputs.package != '@johngw/my-package'
         run: | # shell
-          echo "'${{ steps.test1.outputs.package }}' does not equal '@johngw/my-package'"
+          echo "'${{ steps.test.outputs.package }}' does not equal '@johngw/my-package'"
           exit 1
 
       - name: 🧪  Assert Version
-        if: steps.test1.outputs.version != '1.2.3'
+        if: steps.test.outputs.version != '1.2.3'
         run: | # shell
-          echo "'${{ steps.test1.outputs.version }}' does not equal '1.2.3'"
+          echo "'${{ steps.test.outputs.version }}' does not equal '1.2.3'"
           exit 1
 
+  test2:
+    name: Fixture
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚  Checkout project
+        uses: actions/checkout@v4
+
       - name: Test Multiline
-        id: test2
+        id: test
         uses: ./
         with:
           debug: 'true'
@@ -46,13 +53,20 @@ jobs:
           regex: '[\n\r]*(?P<letter>h)'
 
       - name: 🧪  Assert Multiline
-        if: steps.test2.outputs.letter != 'h'
+        if: steps.test.outputs.letter != 'h'
         run: | # shell
-          echo "'${{ steps.test2.outputs.letter }}' does not equal 'h'"
+          echo "'${{ steps.test.outputs.letter }}' does not equal 'h'"
           exit 1
 
-      - name: Test Single Line
-        id: test3
+  test3:
+    name: Test JSON
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚  Checkout project
+        uses: actions/checkout@v4
+
+      - name: Fixture
+        id: test
         uses: ./
         with:
           asJSON: true
@@ -62,8 +76,8 @@ jobs:
 
       - name: 🧪  Assert JSON
         run: |
-          PACKAGE='${{ fromJSON(steps.test1.outputs.groups).package }}'
-          VERSION='${{ fromJSON(steps.test1.outputs.groups).version }}'
+          PACKAGE='${{ fromJSON(steps.test.outputs.groups).package }}'
+          VERSION='${{ fromJSON(steps.test.outputs.groups).version }}'
           if [[ $PACKAGE != '@johngw/my-package' ]]
           then
             echo "$PACKAGE does not equal '@johngw/my-package'"
