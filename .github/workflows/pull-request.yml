@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚚  Checkout project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Test Single Line
         id: test1
@@ -78,7 +78,7 @@ jobs:
           fi
 
       - name: 🚚  Checkout project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Test Single Line
         id: test
