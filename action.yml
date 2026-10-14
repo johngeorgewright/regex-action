@@ -21,7 +21,7 @@ runs:
     - id: check-python
       shell: bash
       run: | # shell
-        if command -v python3 >/dev/null 2>&1 || command -v python >/dev/null 2>&1; then
+        if command -v python3 >/dev/null 2>&1; then
           echo "installed=true" >> "$GITHUB_OUTPUT"
         else
           echo "installed=false" >> "$GITHUB_OUTPUT"
@@ -33,7 +33,7 @@ runs:
         python-version: '3.x'
 
     - id: parser
-      shell: python
+      shell: 'python3 {0}'
       run: | # python
         import json
         import os
